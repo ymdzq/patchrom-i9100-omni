@@ -38533,8 +38533,6 @@
     :goto_2
     check-cast v7, Ljava/lang/String;
 
-    check-cast v7, Ljava/lang/String;
-
     invoke-interface {v8, v7}, Landroid/view/WindowManagerPolicy;->setPackageName(Ljava/lang/String;)V
 
     invoke-static {}, Landroid/app/ActivityManagerNative;->getDefault()Landroid/app/IActivityManager;
