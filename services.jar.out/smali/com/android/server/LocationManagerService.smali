@@ -5500,7 +5500,7 @@
     .line 1022
     iget-object v1, p0, Lcom/android/server/LocationManagerService;->mAppOps:Landroid/app/AppOpsManager;
 
-    invoke-virtual {v1, v0, p1, p2}, Landroid/app/AppOpsManager;->checkOp(IILjava/lang/String;)I
+    invoke-virtual {v1, v0, p1, p2}, Landroid/app/AppOpsManager;->noteOpNoThrow(IILjava/lang/String;)I
 
     move-result v1
 
@@ -8735,54 +8735,48 @@
 
     if-lez v1, :cond_1
 
-    .line 1440
     invoke-direct {p0}, Lcom/android/server/LocationManagerService;->checkDeviceStatsAllowed()V
 
-    .line 1442
     :cond_1
     invoke-virtual {p1}, Landroid/location/LocationRequest;->getHideFromAppOps()Z
 
     move-result v8
 
-    .line 1443
     .local v8, "hideFromAppOps":Z
     if-eqz v8, :cond_2
 
-    .line 1444
     invoke-direct {p0}, Lcom/android/server/LocationManagerService;->checkUpdateAppOpsAllowed()V
 
-    .line 1446
     :cond_2
     invoke-direct {p0, p1, v9}, Lcom/android/server/LocationManagerService;->createSanitizedRequest(Landroid/location/LocationRequest;I)Landroid/location/LocationRequest;
 
     move-result-object v12
 
-    .line 1448
     .local v12, "sanitizedRequest":Landroid/location/LocationRequest;
     invoke-static {}, Landroid/os/Binder;->getCallingPid()I
 
     move-result v4
 
-    .line 1449
     .local v4, "pid":I
     invoke-static {}, Landroid/os/Binder;->getCallingUid()I
 
     move-result v5
 
-    .line 1451
     .local v5, "uid":I
     invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
 
     move-result-wide v10
 
-    .line 1455
     .local v10, "identity":J
     :try_start_0
     move-object/from16 v0, p4
 
     invoke-virtual {p0, v5, v0, v9}, Lcom/android/server/LocationManagerService;->checkLocationAccess(ILjava/lang/String;I)Z
 
-    .line 1457
+    move-result v1
+
+    if-eqz v1, :cond_4
+
     iget-object v13, p0, Lcom/android/server/LocationManagerService;->mLock:Ljava/lang/Object;
 
     monitor-enter v13
@@ -8804,27 +8798,25 @@
     move-result-object v3
 
     .local v3, "recevier":Lcom/android/server/LocationManagerService$Receiver;
+    if-eqz v3, :cond_3
     move-object v1, p0
 
     move-object v2, v12
 
     move-object/from16 v6, p4
 
-    .line 1460
     invoke-direct/range {v1 .. v6}, Lcom/android/server/LocationManagerService;->requestLocationUpdatesLocked(Landroid/location/LocationRequest;Lcom/android/server/LocationManagerService$Receiver;IILjava/lang/String;)V
 
-    .line 1461
+    :cond_3
     monitor-exit v13
     :try_end_1
     .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
-    .line 1463
+    :cond_4
     invoke-static {v10, v11}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 
-    .line 1465
     return-void
 
-    .line 1461
     .end local v3    # "recevier":Lcom/android/server/LocationManagerService$Receiver;
     :catchall_0
     move-exception v1

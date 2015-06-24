@@ -491,14 +491,13 @@
     .param p0, "argv"    # [Ljava/lang/String;
 
     .prologue
-    .line 565
     :try_start_0
     invoke-static {}, Lcom/android/internal/os/SamplingProfilerIntegration;->start()V
 
-    .line 567
+    invoke-static {}, Lmiui/security/SecurityManager;->init()V
+
     invoke-static {}, Lcom/android/internal/os/ZygoteInit;->registerZygoteSocket()V
 
-    .line 568
     const/16 v2, 0xbcc
 
     invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
@@ -1460,6 +1459,13 @@
     return v0
 .end method
 
+.method private static preloadMiuiResources()V
+    .locals 0
+
+    .prologue
+    return-void
+.end method
+
 .method private static preloadOpenGL()V
     .locals 2
 
@@ -1591,6 +1597,8 @@
     move-result-object v7
 
     invoke-static {v6, v7}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    invoke-static {}, Lcom/android/internal/os/ZygoteInit;->preloadMiuiResources()V
 
     .line 372
     invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
